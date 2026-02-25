@@ -9,7 +9,7 @@ body {
 }
 
 .wave-pattern {
-  background-image: url("Birla.png");
+  background-image: url("./Birla.png");
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: cover;
