@@ -35,6 +35,97 @@
 
   window.currentSubject = 'chemistry';
 
+  const leaderboardData = [
+    { name: 'SHREYAS', exp: 70 },
+    { name: 'VIDYA', exp: 130 },
+    { name: 'SMIRITI', exp: 600 },
+    { name: 'AYUSH SINGH', exp: 230 },
+    { name: 'ANIKET', exp: 702 },
+    { name: 'DILSHAN', exp: 700 },
+    { name: 'YASH', exp: 540 },
+    { name: 'SHWETA', exp: 200 },
+    { name: 'ABHINEET', exp: 1250 },
+    { name: 'KANISHKA', exp: 200 }
+  ];
+  let activeStudentName = 'SHREYAS';
+  const quizFiestaQuestions = [
+    {
+      question: 'ON WHICH DAY, WORLD SCIENCE DAY IS CELEBRATED?',
+      options: ['10 November', '5 June', '22 April', '28 February'],
+      answerIndex: 0
+    },
+    {
+      question: 'Which gas do plants absorb during photosynthesis?',
+      options: ['Oxygen', 'Nitrogen', 'Carbon dioxide', 'Hydrogen'],
+      answerIndex: 2
+    },
+    {
+      question: 'What is the boiling point of water at sea level?',
+      options: ['90°C', '100°C', '110°C', '120°C'],
+      answerIndex: 1
+    },
+    {
+      question: 'Which part of the cell is called the control center?',
+      options: ['Nucleus', 'Cytoplasm', 'Cell wall', 'Vacuole'],
+      answerIndex: 0
+    },
+    {
+      question: 'The SI unit of force is:',
+      options: ['Joule', 'Pascal', 'Newton', 'Watt'],
+      answerIndex: 2
+    },
+    {
+      question: 'Which planet is known as the Red Planet?',
+      options: ['Venus', 'Mars', 'Jupiter', 'Mercury'],
+      answerIndex: 1
+    },
+    {
+      question: 'What type of energy is stored in a stretched rubber band?',
+      options: ['Kinetic energy', 'Thermal energy', 'Elastic potential energy', 'Light energy'],
+      answerIndex: 2
+    },
+    {
+      question: 'Which vitamin is produced in our skin in sunlight?',
+      options: ['Vitamin A', 'Vitamin B12', 'Vitamin C', 'Vitamin D'],
+      answerIndex: 3
+    },
+    {
+      question: 'The process of changing water vapor into liquid water is called:',
+      options: ['Evaporation', 'Condensation', 'Sublimation', 'Filtration'],
+      answerIndex: 1
+    },
+    {
+      question: 'Which blood cells help in fighting infections?',
+      options: ['Red blood cells', 'White blood cells', 'Platelets', 'Plasma'],
+      answerIndex: 1
+    },
+    {
+      question: 'Which instrument is used to measure electric current?',
+      options: ['Voltmeter', 'Ammeter', 'Barometer', 'Thermometer'],
+      answerIndex: 1
+    },
+    {
+      question: 'Which non-metal is liquid at room temperature?',
+      options: ['Bromine', 'Sulfur', 'Chlorine', 'Iodine'],
+      answerIndex: 0
+    },
+    {
+      question: 'What is the main source of energy for Earth?',
+      options: ['Moon', 'Wind', 'Sun', 'Coal'],
+      answerIndex: 2
+    },
+    {
+      question: 'The movement of food from leaves to other parts of a plant is called:',
+      options: ['Respiration', 'Transpiration', 'Translocation', 'Germination'],
+      answerIndex: 2
+    },
+    {
+      question: 'Which of these is a renewable source of energy?',
+      options: ['Coal', 'Petroleum', 'Natural gas', 'Solar energy'],
+      answerIndex: 3
+    }
+  ];
+
   function el(id) {
     return document.getElementById(id);
   }
@@ -156,6 +247,84 @@
     }
   }
 
+  function renderLeaderboard() {
+    const list = el('leaderboard-list');
+    if (!list) {
+      return;
+    }
+
+    const sorted = leaderboardData.slice().sort(function (a, b) {
+      return b.exp - a.exp;
+    });
+
+    list.innerHTML = sorted.map(function (student, index) {
+      const isActive = student.name === activeStudentName;
+      return (
+        "<div class='flex items-center justify-between rounded-lg border px-2.5 py-2 " +
+        (isActive ? "bg-sky-50 border-sky-200" : "bg-white border-slate-100") +
+        "'>" +
+        "<div class='flex items-center gap-2'>" +
+        "<span class='text-[10px] text-slate-400 font-semibold w-4'>" + (index + 1) + "</span>" +
+        "<span class='text-xs font-semibold text-[#1e3a8a]'>" + student.name + "</span>" +
+        "</div>" +
+        "<span class='text-xs font-bold text-slate-600'>" + student.exp + " EXP</span>" +
+        "</div>"
+      );
+    }).join('');
+  }
+
+  function syncStudentDropdown() {
+    const select = el('leaderboard-student');
+    if (!select) {
+      return;
+    }
+
+    if (!select.options.length) {
+      select.innerHTML = leaderboardData.map(function (student) {
+        return "<option value='" + student.name + "'>" + student.name + "</option>";
+      }).join('');
+    }
+
+    select.value = activeStudentName;
+  }
+
+  function addDoubtExp() {
+    const currentStudent = leaderboardData.find(function (student) {
+      return student.name === activeStudentName;
+    });
+    if (!currentStudent) {
+      return;
+    }
+
+    currentStudent.exp += 10;
+    renderLeaderboard();
+  }
+
+  function renderQuizFiestaQuestions() {
+    const list = el('quiz-questions-list');
+    if (!list) {
+      return;
+    }
+
+    list.innerHTML = quizFiestaQuestions.map(function (item, index) {
+      const options = item.options.map(function (option, optionIndex) {
+        return (
+          "<label class='flex items-start gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5'>" +
+          "<input type='radio' name='quiz-q-" + index + "' value='" + optionIndex + "' class='mt-0.5'>" +
+          "<span class='text-[11px] text-slate-700'>" + option + "</span>" +
+          "</label>"
+        );
+      }).join('');
+
+      return (
+        "<div class='rounded-xl border border-sky-100 p-2.5 bg-white'>" +
+        "<p class='text-[11px] font-semibold text-[#1e3a8a] mb-2'>" + (index + 1) + ". " + item.question + "</p>" +
+        "<div class='space-y-1.5'>" + options + "</div>" +
+        "</div>"
+      );
+    }).join('');
+  }
+
   async function askBackend(subject, chapter, question) {
     const controller = new AbortController();
     const timeoutId = window.setTimeout(function () {
@@ -238,6 +407,7 @@
       return;
     }
 
+    addDoubtExp();
     setAskLoading(true);
     setResponse('Thinking...');
 
@@ -312,6 +482,97 @@
         setResponse('Could not play voice. ' + (voiceError.message || 'Please try again.'));
       }
     }
+  };
+
+  window.toggleLeaderboard = function toggleLeaderboard() {
+    const modal = el('leaderboard-modal');
+    if (!modal) {
+      return;
+    }
+
+    syncStudentDropdown();
+    renderLeaderboard();
+    modal.classList.remove('hidden');
+  };
+
+  window.closeLeaderboard = function closeLeaderboard() {
+    const modal = el('leaderboard-modal');
+    if (!modal) {
+      return;
+    }
+    modal.classList.add('hidden');
+  };
+
+  window.updateLeaderboardStudent = function updateLeaderboardStudent(name) {
+    if (!name) {
+      return;
+    }
+    activeStudentName = name;
+    renderLeaderboard();
+  };
+
+  window.openQuizFiesta = function openQuizFiesta() {
+    const modal = el('quiz-fiesta-modal');
+    const intro = el('quiz-intro-screen');
+    const questions = el('quiz-questions-screen');
+    const resultScreen = el('quiz-result-screen');
+    if (!modal || !intro || !questions || !resultScreen) {
+      return;
+    }
+
+    intro.classList.remove('hidden');
+    questions.classList.add('hidden');
+    resultScreen.classList.add('hidden');
+    modal.classList.remove('hidden');
+  };
+
+  window.closeQuizFiesta = function closeQuizFiesta() {
+    const modal = el('quiz-fiesta-modal');
+    if (!modal) {
+      return;
+    }
+    modal.classList.add('hidden');
+  };
+
+  window.startQuizFiesta = function startQuizFiesta() {
+    const intro = el('quiz-intro-screen');
+    const questions = el('quiz-questions-screen');
+    const resultScreen = el('quiz-result-screen');
+    if (!intro || !questions || !resultScreen) {
+      return;
+    }
+
+    intro.classList.add('hidden');
+    questions.classList.remove('hidden');
+    resultScreen.classList.add('hidden');
+    renderQuizFiestaQuestions();
+  };
+
+  window.submitQuizFiesta = function submitQuizFiesta() {
+    const questions = el('quiz-questions-screen');
+    const resultScreen = el('quiz-result-screen');
+    const scoreText = el('quiz-result-score');
+    const percentageText = el('quiz-result-percentage');
+    if (!questions || !resultScreen || !scoreText || !percentageText) {
+      return;
+    }
+
+    let score = 0;
+    const marksPerQuestion = 4;
+    quizFiestaQuestions.forEach(function (item, index) {
+      const selected = document.querySelector("input[name='quiz-q-" + index + "']:checked");
+      if (selected && Number(selected.value) === item.answerIndex) {
+        score += marksPerQuestion;
+      }
+    });
+
+    const total = quizFiestaQuestions.length * marksPerQuestion;
+    const percentage = total ? (score / total) * 100 : 0;
+
+    scoreText.textContent = 'RESULT: ' + score + ' / ' + total + ' MARKS';
+    percentageText.textContent = 'PERCENTAGE: ' + percentage.toFixed(2) + '%';
+    questions.classList.add('hidden');
+    resultScreen.classList.remove('hidden');
   };
 
   async function onConfigChange(config) {
@@ -393,4 +654,25 @@
       }
     });
   }
+
+  const modal = el('leaderboard-modal');
+  if (modal) {
+    modal.addEventListener('click', function (event) {
+      if (event.target === modal) {
+        window.closeLeaderboard();
+      }
+    });
+  }
+
+  const quizModal = el('quiz-fiesta-modal');
+  if (quizModal) {
+    quizModal.addEventListener('click', function (event) {
+      if (event.target === quizModal) {
+        window.closeQuizFiesta();
+      }
+    });
+  }
+
+  syncStudentDropdown();
+  renderLeaderboard();
 })();

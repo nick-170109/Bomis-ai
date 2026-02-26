@@ -8,8 +8,9 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="./ai.css">
-  <link rel="icon" type="image/png" href="./1.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ai.css">
+  <link rel="icon" type="image/png" href="1.jpg">
 
 </head>
 
@@ -24,12 +25,17 @@
         <div id="home-screen" class="min-h-full flex flex-col"><header class="pt-10 px-5 pb-4">
             <div class="flex items-center gap-3 mb-3"><div
                 class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-100 to-sky-200 flex items-center justify-center border border-sky-200/50 shadow-sm">
-                <img src="./Birla.png" alt="Birla Open Minds Logo" class="w-7 h-7 object-contain">
+                <img src="Birla.png" alt="Birla Open Minds Logo" class="w-7 h-7 object-contain">
               </div>
               <div class="flex-1">
                 <h1 id="app-title" class="text-lg font-bold text-[#1e3a8a] leading-tight">BOMIS AI</h1>
-                <p id="app-subtitle" class="text-[10px] text-slate-500 mt-0.5 leading-tight">AI Assistant for Class 9 - Science | Humanities | Languages</p>
+                <p id="app-subtitle" class="text-[10px] text-slate-500 mt-0.5 leading-tight">AI Assistant for Class 9 </p>
               </div>
+              <button onclick="openQuizFiesta()"
+                class="shrink-0 rounded-xl border border-emerald-300 bg-gradient-to-br from-emerald-100 to-lime-100 px-2 py-1.5 shadow-sm animate-pulse">
+                <p class="text-[9px] font-bold text-emerald-700 leading-none">QUIZ</p>
+                <p class="text-[9px] font-bold text-emerald-700 leading-none">FIESTA</p>
+              </button>
             </div><div class="flex gap-2 mt-3"><span
                 class="px-2.5 py-1 bg-sky-100/80 text-[#1e3a8a] text-[9px] font-medium rounded-full border border-sky-200/50">Today's
                 Chapter Only</span> <span
@@ -40,6 +46,60 @@
                   <path
                     d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
                 </svg> Voice Learning Mode </span>
+            </div>
+            <button onclick="toggleLeaderboard()"
+              class="mt-3 w-full rounded-xl border border-sky-200/60 bg-gradient-to-r from-sky-50 to-sky-100/60 px-3 py-2 text-left">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-[9px] text-slate-500 font-medium uppercase tracking-wide">EXP Box</p>
+                  <p class="text-xs text-[#1e3a8a] font-semibold">Tap to view Top 10 leaderboard</p>
+                </div>
+                <div class="w-8 h-8 rounded-lg bg-white/80 border border-sky-200/70 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-[#1e3a8a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div id="leaderboard-modal" class="hidden fixed inset-0 z-30 bg-slate-900/40 p-4 flex items-center justify-center">
+              <div class="w-full max-w-[330px] rounded-2xl bg-white p-4 border border-sky-100 shadow-xl">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-sm font-bold text-[#1e3a8a]">Student EXP Leaderboard</h3>
+                  <button onclick="closeLeaderboard()" class="text-xs text-slate-500 font-semibold">Close</button>
+                </div>
+                <label for="leaderboard-student" class="text-[10px] text-slate-500 font-medium">Current student</label>
+                <select id="leaderboard-student" onchange="updateLeaderboardStudent(this.value)"
+                  class="mt-1 mb-3 w-full rounded-lg border border-sky-200 bg-white px-2.5 py-2 text-xs text-[#1e3a8a] font-semibold"></select>
+                <p class="text-[10px] text-slate-400 mb-2">Every doubt asked in any subject adds +10 EXP.</p>
+                <div id="leaderboard-list" class="space-y-1.5 max-h-52 overflow-auto"></div>
+              </div>
+            </div>
+            <div id="quiz-fiesta-modal" class="hidden fixed inset-0 z-40 bg-slate-900/50 p-4 flex items-center justify-center">
+              <div class="w-full max-w-[360px] min-h-[480px] rounded-2xl bg-white border border-emerald-200 shadow-xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                  <h3 class="text-2xl font-bold text-emerald-700 tracking-wide" style="font-family: 'Bungee', cursive;">Quiz Fiesta</h3>
+                  <button onclick="closeQuizFiesta()" class="text-xs font-semibold text-slate-500">Close</button>
+                </div>
+                <div id="quiz-intro-screen">
+                  <h4 class="mt-6 text-[18px] font-bold text-[#1e3a8a] leading-snug">BIRLA OPEN MINDS INTERNATIONAL SCHOOL QUIZ FIESTA</h4>
+                  <p class="mt-5 text-[15px] text-slate-600 leading-relaxed">BIRLA OPEN MINDS INTERNATIONAL SCHOOL QUIZ FIESTA, OUR SCHOOL [BOMIS] HAS ORGANISED A SCIENCE EXHIBITION QUIZ TODAY, FOR PARTICIPATION JUST CLICK THE START BUTTON GIVEN BELOW.</p>
+                  <button onclick="startQuizFiesta()" class="mt-4 w-full rounded-xl bg-gradient-to-r from-emerald-500 to-lime-500 py-2.5 text-sm font-bold text-white shadow-md">START</button>
+                </div>
+                <div id="quiz-questions-screen" class="hidden">
+                  <h4 class="text-xs font-bold text-[#1e3a8a] mb-2">Science Quiz - Grade 8 (15 Questions)</h4>
+                  <div id="quiz-questions-list" class="space-y-3 max-h-[360px] overflow-auto pr-1"></div>
+                  <button onclick="submitQuizFiesta()" class="mt-4 w-full rounded-xl bg-gradient-to-r from-[#1e3a8a] to-[#1e4ba8] py-2.5 text-sm font-bold text-white shadow-md">SUBMIT</button>
+                </div>
+                <div id="quiz-result-screen" class="hidden">
+                  <h4 class="text-xs font-bold text-[#1e3a8a] mb-2">Quiz Result</h4>
+                  <div id="quiz-result-box" class="w-full aspect-square rounded-xl border-[3px] border-emerald-500 bg-emerald-50 p-4 flex flex-col justify-center">
+                    <p id="quiz-result-score" class="text-base font-extrabold text-emerald-700 text-center"></p>
+                    <p id="quiz-result-percentage" class="text-sm font-extrabold text-slate-800 mt-2 text-center"></p>
+                    <p class="text-xs text-slate-700 mt-4 font-extrabold text-center">WE HOPE TO SEE YOU ON THE LEADERBOARD, STAY TUNED.</p>
+                  </div>
+                  <button onclick="openQuizFiesta()" class="mt-4 w-full rounded-xl bg-gradient-to-r from-emerald-500 to-lime-500 py-2.5 text-sm font-bold text-white shadow-md">BACK TO QUIZ HOME</button>
+                </div>
+              </div>
             </div>
           </header><main class="flex-1 px-5 py-4">
             <p class="text-xs text-slate-500 mb-4 font-medium">Select a subject to start learning</p>
@@ -113,8 +173,8 @@
 
               <button onclick="showSubject('hindi')" class="card-hover bg-gradient-to-br from-white to-sky-50 rounded-2xl p-4 text-left border border-sky-100 shadow-md">
                 <div class="w-10 h-10 rounded-xl bg-sky-100/80 flex items-center justify-center mb-3">
-                  <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.246.035 3.371.106a17.362 17.362 0 01-3.371 1.706" />
+                  <svg class="w-5 h-5 text-[#1e3a8a]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
                   </svg>
                 </div>
                 <h3 class="font-semibold text-[#1e3a8a] text-sm">Hindi</h3>
@@ -282,9 +342,7 @@
       </div>
     </div>
   </div>
-  <script src="./script.js"></script>
+  <script src="./script.js?v=7"></script>
 </body>
 
-
 </html>
-
