@@ -511,9 +511,19 @@
     renderLeaderboard();
   };
 
-  window.startQuizFiesta = function startQuizFiesta() {
-    // Redirect to the external quiz contest URL
-    window.location.href = "https://bomis-quiz-contest.onrender.com/";
+  window.openQuizFiesta = function openQuizFiesta() {
+    const modal = el('quiz-fiesta-modal');
+    const intro = el('quiz-intro-screen');
+    const questions = el('quiz-questions-screen');
+    const resultScreen = el('quiz-result-screen');
+    if (!modal || !intro || !questions || !resultScreen) {
+      return;
+    }
+
+    intro.classList.remove('hidden');
+    questions.classList.add('hidden');
+    resultScreen.classList.add('hidden');
+    modal.classList.remove('hidden');
   };
 
   window.closeQuizFiesta = function closeQuizFiesta() {
@@ -525,17 +535,8 @@
   };
 
   window.startQuizFiesta = function startQuizFiesta() {
-    const intro = el('quiz-intro-screen');
-    const questions = el('quiz-questions-screen');
-    const resultScreen = el('quiz-result-screen');
-    if (!intro || !questions || !resultScreen) {
-      return;
-    }
-
-    intro.classList.add('hidden');
-    questions.classList.remove('hidden');
-    resultScreen.classList.add('hidden');
-    renderQuizFiestaQuestions();
+    // Redirect to the external quiz contest URL
+    window.location.href = "https://bomis-quiz-contest.onrender.com/";
   };
 
   window.submitQuizFiesta = function submitQuizFiesta() {
@@ -666,4 +667,3 @@
   syncStudentDropdown();
   renderLeaderboard();
 })();
-
